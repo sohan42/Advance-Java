@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.*;
+import java.beans.*;
 import java.io.*;
 import javax.swing.*;
 
@@ -87,6 +88,9 @@ class JavaC extends JFrame{
             }
         });
     }
+     /*EventQueue.invokeLater(()->{
+            new JavaF();
+        });*/
 }
 
 class JavaLayout extends JFrame{
@@ -144,10 +148,20 @@ class JavaLayout extends JFrame{
 }
 
 public class JavaF{
-    public static void main(String[] args) {
-        /*EventQueue.invokeLater(()->{
-            new JavaF();
-        });*/
-        
+    public static void main(String[] args) throws IntrospectionException {
+       BeanInfo info = Introspector.getBeanInfo(Person.class);
+       
+       BeanDescriptor beanDescriptor = info.getBeanDescriptor();
+       System.out.println("Class name: "+beanDescriptor.getName());
+       
+       PropertyDescriptor[] propertyDescriptor = info.getPropertyDescriptors();
+       System.out.println("Properties: ");
+       for(PropertyDescriptor pd: propertyDescriptor){
+           System.out.println("Name: "+pd.getName()); //returns the name of the property
+           System.out.println("Type: "+pd.getPropertyType()); //returns the type of the property
+           System.out.println("Read method: "+pd.getReadMethod()); //returns the getter method
+           System.out.println("Write method: "+pd.getWriteMethod()); //returns the setter method
+           System.out.println(); 
+       }
     }
 }
