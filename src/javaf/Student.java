@@ -64,6 +64,7 @@ class Person implements Serializable{
     }
 }
 
+//Implementing BeanInfo interfac on Person class
 class PersonBeanInfo implements BeanInfo{
 
     @Override
@@ -113,4 +114,53 @@ class PersonBeanInfo implements BeanInfo{
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
+    /* In main:
+        BeanInfo info = Introspector.getBeanInfo(Person.class);
+       
+       BeanDescriptor beanDescriptor = info.getBeanDescriptor();
+       System.out.println("Class name: "+beanDescriptor.getName());
+       
+       PropertyDescriptor[] propertyDescriptor = info.getPropertyDescriptors();
+       System.out.println("Properties: ");
+       for(PropertyDescriptor pd: propertyDescriptor){
+           System.out.println("Name: "+pd.getName()); //returns the name of the property
+           System.out.println("Type: "+pd.getPropertyType()); //returns the type of the property
+           System.out.println("Read method: "+pd.getReadMethod()); //returns the getter method
+           System.out.println("Write method: "+pd.getWriteMethod()); //returns the setter method
+           System.out.println(); 
+    */
+}
+
+//Program using Bean Class Employee to demonstrate Bound property
+class Employee implements Serializable{
+    private String name;
+    private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+    
+    public Employee(){} //no-args constructor
+    
+    public Employee(String name){ //parameterized constructor
+        this.name = name;
+    } 
+    public String getName(){
+        return name;
+    }
+    public void setName(String name){
+        String oldName = this.name;
+        this.name=name;
+        pcs.firePropertyChange("name", oldName, name);
+    }
+    public void addPropertyChangeListener(PropertyChangeListener listener){
+        pcs.addPropertyChangeListener(listener);
+    }
+    
+    /*In main:
+        Employee e = new Employee("Abhi Basnet");
+        e.addPropertyChangeListener(new PropertyChangeListener(){
+           @Override
+           public void propertyChange(PropertyChangeEvent evt) {
+               System.out.println("Property: "+evt.getPropertyName()+" Changed from "+evt.getOldValue()+" to "+evt.getNewValue());           
+           }
+       });
+       //e.setName("Raj Gurung");
+    */
 }

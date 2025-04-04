@@ -149,19 +149,13 @@ class JavaLayout extends JFrame{
 
 public class JavaF{
     public static void main(String[] args) throws IntrospectionException {
-       BeanInfo info = Introspector.getBeanInfo(Person.class);
-       
-       BeanDescriptor beanDescriptor = info.getBeanDescriptor();
-       System.out.println("Class name: "+beanDescriptor.getName());
-       
-       PropertyDescriptor[] propertyDescriptor = info.getPropertyDescriptors();
-       System.out.println("Properties: ");
-       for(PropertyDescriptor pd: propertyDescriptor){
-           System.out.println("Name: "+pd.getName()); //returns the name of the property
-           System.out.println("Type: "+pd.getPropertyType()); //returns the type of the property
-           System.out.println("Read method: "+pd.getReadMethod()); //returns the getter method
-           System.out.println("Write method: "+pd.getWriteMethod()); //returns the setter method
-           System.out.println(); 
-       }
+       Employee e = new Employee("Abhi Basnet");
+       e.addPropertyChangeListener(new PropertyChangeListener(){
+           @Override
+           public void propertyChange(PropertyChangeEvent evt) {
+               System.out.println("Property: "+evt.getPropertyName()+" Changed from "+evt.getOldValue()+" to "+evt.getNewValue());           
+           }
+       });
+       //e.setName("Raj Gurung");
     }
 }
