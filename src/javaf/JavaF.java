@@ -7,7 +7,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.*;
-import java.beans.*;
 import java.io.*;
 import javax.swing.*;
 
@@ -148,14 +147,7 @@ class JavaLayout extends JFrame{
 }
 
 public class JavaF{
-    public static void main(String[] args) throws IntrospectionException {
-       Employee e = new Employee("Abhi Basnet");
-       e.addPropertyChangeListener(new PropertyChangeListener(){
-           @Override
-           public void propertyChange(PropertyChangeEvent evt) {
-               System.out.println("Property: "+evt.getPropertyName()+" Changed from "+evt.getOldValue()+" to "+evt.getNewValue());           
-           }
-       });
-       //e.setName("Raj Gurung");
+    public static void main(String[] args) throws Exception {
+       
     }
-}
+}    

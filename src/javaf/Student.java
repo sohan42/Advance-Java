@@ -42,7 +42,7 @@ public class Student implements Serializable{ //Rule-1: Must implement Serializa
     }
 }
 
-//Bean Person class
+//Bean Person class with the concept of serialization
 class Person implements Serializable{
     private String name;
     private int age;
@@ -62,6 +62,23 @@ class Person implements Serializable{
     public int getAge(){
         return age;
     }
+    /*In main:
+        Person p = new Person();
+       p.setName("Amit");
+       p.setAge(24);
+       
+       FileOutputStream fo = new FileOutputStream("person.ser");
+       ObjectOutputStream out = new ObjectOutputStream(fo);
+       out.writeObject(p);
+       System.out.println("Serializaed data is saved in person.ser");
+       
+       FileInputStream fi = new FileInputStream("person.ser");
+       ObjectInputStream in = new ObjectInputStream(fi);
+       Person per = (Person) in.readObject();
+       System.out.println("Deserialized person...");
+       System.out.println("Name: "+per.getName());
+       System.out.println("Age: "+per.getAge());
+    */
 }
 
 //Implementing BeanInfo interfac on Person class
@@ -162,5 +179,61 @@ class Employee implements Serializable{
            }
        });
        //e.setName("Raj Gurung");
+    */
+}
+
+//Program using Bean Class User to demonstrate Constrained property
+class User implements Serializable{
+    private String name;
+    private int age;
+    private VetoableChangeSupport vcs = new VetoableChangeSupport(this);
+    
+    public User(){}
+    
+    public User(String name, int age){
+        this.name=name;
+        this.age=age;
+    }
+    
+    public void setName(String name){
+        this.name = name;
+    }
+    public String getName(){
+        return name;
+    }
+    public int getAge(){
+        return age;
+    }
+    
+    public void setAge(int age) throws PropertyVetoException{
+        int oldAge = this.age;
+        PropertyChangeEvent e = new PropertyChangeEvent(this, "age",oldAge,age); 
+        vcs.fireVetoableChange(e);
+        this.age = age;
+    } 
+    
+    public void addVetoableChangeListeter(VetoableChangeListener listener){
+        vcs.addVetoableChangeListener(listener);
+    }
+    /*In main:
+        User u = new User("Raj",24);
+       u.addVetoableChangeListeter(new VetoableChangeListener(){
+           @Override
+           public void vetoableChange(PropertyChangeEvent e) throws PropertyVetoException{
+               if("age".equals(e.getPropertyName())){
+                   int newAge = (int) e.getNewValue();
+                   if(newAge<0){
+                       throw new PropertyVetoException("Age cannot be negative",e);
+                   }
+               }
+             System.out.println(e.getPropertyName()+"Changed from "+e.getOldValue()+" to "+e.getNewValue());
+           }
+       });
+       try{
+            u.setName("Amit");
+            u.setAge(-30);
+        }catch(PropertyVetoException ex){
+            System.out.println(ex.getMessage());
+        }
     */
 }
